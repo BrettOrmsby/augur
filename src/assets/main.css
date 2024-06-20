@@ -1,0 +1,25 @@
+:root {
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  --block-space: 1.25rem;
+  --inline-space: 0.5rem
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  margin-bottom: 2em;
+}
+
+main {
+  padding: var(--block-space)
+}
+
+.p-button svg {
+  height: var(--p-icon-size);
+  width: var(--p-icon-size);
+}
