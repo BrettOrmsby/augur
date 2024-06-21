@@ -29,7 +29,7 @@
           aria-label="Search"
           @keyup.enter="search"
         />
-        <Button aria-label="Save" @click="search">
+        <Button aria-label="Search" @click="search">
           <template #icon="icon">
             <svg
               :class="icon.class"
@@ -55,14 +55,14 @@
 </template>
 
 <script lang="ts" setup>
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import Menubar from 'primevue/menubar'
 import InputGroup from 'primevue/inputgroup'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { reloadSearch } from '@/store/store'
+import { onMounted } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -78,6 +78,7 @@ const search = () => {
   }
 }
 
+onMounted(() => (searchPrompt.value = route.query.q?.toString() || ''))
 watch(
   () => route.query.q,
   (val) => {
@@ -103,6 +104,9 @@ watch(
   border-top: none;
   z-index: 100;
 }
+.p-menubar {
+  justify-content: center;
+}
 :deep(.p-menubar-root-list) {
   flex-wrap: nowrap;
 }
@@ -120,5 +124,6 @@ svg {
 .p-inputgroup,
 :deep(.p-menubar-start) {
   width: 100%;
+  max-width: 600px;
 }
 </style>

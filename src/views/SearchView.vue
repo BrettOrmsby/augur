@@ -1,16 +1,24 @@
 <template>
   <SettingsModel />
   <ClipboardModel />
+  <header>
+    <NavBar />
+  </header>
   <main>
     <SearchToolBar :data="data" />
     <template v-if="isLoading">
       <Skeleton style="margin-top: 1rem; margin-bottom: 1rem" />
       <Divider />
       <div class="card-container">
-        <SkeletonCard v-for="index in 6" :key="index"></SkeletonCard>
+        <SkeletonCard v-for="index in 12" :key="index" />
       </div>
     </template>
-    <pre v-else-if="isError">{{ errorMessage }}</pre>
+    <Message
+      v-else-if="isError"
+      :severity="errorMessage === 'No cards match your query.' ? 'warn' : 'error'"
+    >
+      {{ errorMessage }}
+    </Message>
     <template v-else-if="data">
       <p>
         Viewing
@@ -40,11 +48,13 @@ import scryfall from 'scryfall-client'
 import type List from 'scryfall-client/dist/models/list'
 import type Card from 'scryfall-client/dist/models/card'
 import Divider from 'primevue/divider'
-import MTGCard from '@/components/MTGCard.vue'
+import Message from 'primevue/message'
 import Skeleton from 'primevue/skeleton'
+import MTGCard from '@/components/MTGCard.vue'
 import SearchToolBar from '@/components/SearchToolBar.vue'
 import SettingsModel from '@/components/SettingsModel.vue'
 import ClipboardModel from '@/components/ClipboardModel.vue'
+import NavBar from '@/components/NavBar.vue'
 import SkeletonCard from '@/components/SkeletonCard.vue'
 import { reloadSearch, settings } from '@/store/store'
 
@@ -101,15 +111,36 @@ onMounted(getScryfallData)
 </script>
 
 <style scoped>
-pre {
-  font-family: inherit;
-  text-wrap: wrap;
+.p-message {
+  margin-top: var(--block-space);
+  white-space: pre-wrap;
 }
 
 .card-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--block-space);
+}
+
+@media (min-width: 370px) {
+  .card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--block-space);
+  }
+}
+
+@media (min-width: 600px) {
+  .card-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--block-space);
+  }
+}
+
+@media (min-width: 800px) {
+  .card-container {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }
 </style>

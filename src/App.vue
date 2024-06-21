@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import NavBar from '@/components/NavBar.vue'
 import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { RouterView } from 'vue-router'
+import TheFooter from '@/components/TheFooter.vue'
+// TODO: move vue icons to own components
+// TODO: batch search pages by 60 or 75
 </script>
 
 <template>
   <Toast position="top-center" />
   <ConfirmDialog style="margin: var(--block-space)" />
-  <header>
-    <NavBar />
-  </header>
 
   <RouterView />
+  <TheFooter />
 </template>
 
 <style scoped></style>

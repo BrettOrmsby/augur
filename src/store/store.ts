@@ -6,7 +6,7 @@ export const UIStates = reactive({
   isClipBoardOpen: false
 })
 
-// TODO: dark/light mode switch
+// TODO: dark/light mode switch and ensure light and dark mode work
 export const clipboard = useLocalStorage<{ cards: string[] }>('clipboard', { cards: [] })
 
 export const settings = useLocalStorage<{

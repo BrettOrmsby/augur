@@ -16,7 +16,10 @@ header {
 }
 
 main {
-  padding: var(--block-space)
+  padding: var(--block-space);
+  margin: 0 auto;
+  max-width: 900px;
+
 }
 
 .p-button svg {

@@ -2,6 +2,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
+  scrollBehavior(_to, _from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -9,7 +16,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
-        title: 'Auger'
+        title: 'Augur'
       }
     },
     {
@@ -17,7 +24,7 @@ const router = createRouter({
       name: 'search',
       component: () => import('../views/SearchView.vue'),
       meta: {
-        title: 'Auger • Search'
+        title: 'Augur • Search'
       }
     }
   ]
