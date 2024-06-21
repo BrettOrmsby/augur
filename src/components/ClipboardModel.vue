@@ -13,7 +13,7 @@
     </template>
 
     <div class="model-container">
-      <SkeletonCard v-if="isLoading || isError" vertical />
+      <SkeletonCard v-if="isLoading || isError || selectedCard === ''" vertical />
       <MTGCard v-else-if="data" :card="data" vertical />
 
       <Listbox
@@ -82,7 +82,7 @@ watch(selectedCard, (value) => value && loadCard(value))
 
 watch(
   () => UIStates.isClipBoardOpen,
-  () => (selectedCard.value = clipboard.value.cards[0])
+  () => (selectedCard.value = clipboard.value.cards[0] || '')
 )
 
 const toast = useToast()
@@ -127,6 +127,7 @@ const clear = () => {
     accept() {
       clipboard.value.cards = []
       UIStates.isClipBoardOpen = false
+      selectedCard.value = ''
     },
     onShow: () => {
       isConfirmVisible.value = true
@@ -150,6 +151,7 @@ const clear = () => {
   width: var(--p-dialog-title-font-size);
 }
 .model-container {
+  margin-top: 2px;
   align-items: flex-start;
   justify-content: center;
   gap: var(--block-space);

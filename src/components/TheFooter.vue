@@ -32,6 +32,7 @@ import GithubIcon from '@/components/icons/GithubIcon.vue'
 footer {
   padding: var(--block-space);
   background-color: var(--p-surface-800);
+  background-color: var(--p-form-field-filled-background);
   border-top: 1px solid var(--p-content-border-color);
 }
 p {

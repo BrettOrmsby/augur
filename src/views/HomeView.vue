@@ -84,6 +84,7 @@
       </Card>
     </div>
   </main>
+  <TheFooter />
 </template>
 
 <script setup lang="ts">
@@ -101,6 +102,7 @@ import PhoneIcon from '@/components/icons/PhoneIcon.vue'
 import SettingsIcon from '@/components/icons/SettingsIcon.vue'
 import PiggyBankIcon from '@/components/icons/PiggyBankIcon.vue'
 import SunMoonIcon from '@/components/icons/SunMoonIcon.vue'
+import TheFooter from '@/components/TheFooter.vue'
 
 const router = useRouter()
 
@@ -145,14 +147,14 @@ strong {
   gap: var(--block-space);
 }
 .p-card {
-  background-color: var(--p-surface-900);
+  background-color: var(--p-content-background);
   border: 1px solid var(--p-content-border-color);
   max-width: 250px;
   width: 100%;
 }
 .p-card :deep(.icon-container) {
   background: var(--p-primary-color);
-  color: var(--p-surface-900);
+  color: var(--p-content-background);
   padding: var(--inline-space);
   border-radius: var(--p-border-radius-md);
   width: fit-content;
@@ -176,8 +178,8 @@ strong {
 }
 .p-card :deep(code) {
   font-family: inherit;
-  background: var(--p-surface-700);
-  color: var(--p-primary-300);
+  background: var(--p-form-field-filled-background);
+  color: var(--p-form-field-filled-color);
   font-size: 0.875rem;
   font-weight: 700;
   padding: 0.25rem 0.5rem;

@@ -2,8 +2,6 @@
 import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { RouterView } from 'vue-router'
-import TheFooter from '@/components/TheFooter.vue'
-// TODO: move vue icons to own components
 // TODO: batch search pages by 60 or 75
 </script>
 
@@ -12,7 +10,6 @@ import TheFooter from '@/components/TheFooter.vue'
   <ConfirmDialog style="margin: var(--block-space)" />
 
   <RouterView />
-  <TheFooter />
 </template>
 
 <style scoped></style>

@@ -39,6 +39,7 @@
       <SearchToolBar :data="data" />
     </template>
   </main>
+  <TheFooter />
 </template>
 
 <script lang="ts" setup>
@@ -57,6 +58,7 @@ import ClipboardModel from '@/components/ClipboardModel.vue'
 import NavBar from '@/components/NavBar.vue'
 import SkeletonCard from '@/components/SkeletonCard.vue'
 import { reloadSearch, settings } from '@/store/store'
+import TheFooter from '@/components/TheFooter.vue'
 
 const isLoading = ref(true)
 const isError = ref(false)
@@ -111,6 +113,9 @@ onMounted(getScryfallData)
 </script>
 
 <style scoped>
+main {
+  min-height: 70vh;
+}
 .p-message {
   margin-top: var(--block-space);
   white-space: pre-wrap;

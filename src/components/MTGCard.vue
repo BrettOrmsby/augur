@@ -115,6 +115,7 @@ const toggleClipboard = () => {
 }
 .card.isInClipboard {
   outline: solid 2px var(--p-button-primary-background);
+  outline-offset: 2px;
 }
 
 .card:has(.spinner) {
