@@ -17,23 +17,7 @@
         <a :href="card.scryfall_uri" target="_blank">
           <Button aria-label="Open In Scryfall" size="small" severity="secondary">
             <template #icon="iconClass">
-              <svg
-                :class="iconClass.class"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-external-link"
-              >
-                <path d="M15 3h6v6" />
-                <path d="M10 14 21 3" />
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              </svg>
+              <OpenLinkIcon :class="iconClass.class" />
             </template>
           </Button>
         </a>
@@ -54,22 +38,7 @@
           :disabled="!isFlipCard"
         >
           <template #icon="iconClass">
-            <svg
-              :class="iconClass.class"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-rotate-cw"
-            >
-              <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-              <path d="M21 3v5h-5" />
-            </svg>
+            <RotateIcon :class="iconClass.class" />
           </template>
         </Button>
       </template>
@@ -83,6 +52,8 @@ import DeferredContent from 'primevue/deferredcontent'
 import Button from 'primevue/button'
 import Toolbar from 'primevue/toolbar'
 import Tag from 'primevue/tag'
+import OpenLinkIcon from '@/components/icons/OpenLinkIcon.vue'
+import RotateIcon from '@/components/icons/RotateIcon.vue'
 import { computed } from 'vue'
 import { ref } from 'vue'
 import { clipboard, settings } from '@/store/store'

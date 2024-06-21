@@ -19,12 +19,14 @@
     </p>
     <p>
       All other content © 2024 Brett Ormsby • View source on
-      <a href="https://github.com/BrettOrmsby/augur">Github</a>
+      <a href="https://github.com/BrettOrmsby/augur"><GithubIcon />Github</a>
     </p>
   </footer>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import GithubIcon from '@/components/icons/GithubIcon.vue'
+</script>
 
 <style scoped>
 footer {
@@ -49,5 +51,11 @@ a {
 a:hover {
   color: var(--p-button-link-hover-color);
   text-decoration: underline;
+}
+svg {
+  width: 1em;
+  height: 1em;
+  display: inline;
+  vertical-align: middle;
 }
 </style>

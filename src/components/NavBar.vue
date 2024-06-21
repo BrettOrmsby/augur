@@ -4,21 +4,7 @@
       <div class="p-menubar-item logo-container">
         <div class="p-menubar-item-content">
           <RouterLink to="/" class="p-menubar-item-link">
-            <svg
-              class="logo lucide lucide-eclipse"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <path d="M12 2a7 7 0 1 0 10 10" />
-            </svg>
+            <EclipseIcon class="logo" />
           </RouterLink>
         </div>
       </div>
@@ -31,22 +17,7 @@
         />
         <Button aria-label="Search" @click="search">
           <template #icon="icon">
-            <svg
-              :class="icon.class"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-search"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <path d="m21 21-4.3-4.3" />
-            </svg>
+            <SearchIcon :class="icon.class" />
           </template>
         </Button>
       </InputGroup>
@@ -60,6 +31,8 @@ import Menubar from 'primevue/menubar'
 import InputGroup from 'primevue/inputgroup'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
+import EclipseIcon from '@/components/icons/EclipseIcon.vue'
+import SearchIcon from '@/components/icons/SearchIcon.vue'
 import { ref, watch } from 'vue'
 import { reloadSearch } from '@/store/store'
 import { onMounted } from 'vue'
