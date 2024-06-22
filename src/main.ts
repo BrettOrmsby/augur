@@ -62,6 +62,13 @@ const preset = definePreset(Aura, {
     }
   }
 })
-app.use(PrimeVue, { theme: { preset: preset } })
+app.use(PrimeVue, {
+  theme: {
+    preset: preset,
+    options: {
+      darkModeSelector: '.app-dark'
+    }
+  }
+})
 
 app.mount('#app')

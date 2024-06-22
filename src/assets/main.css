@@ -25,4 +25,5 @@ main {
 .p-button svg {
   height: var(--p-icon-size);
   width: var(--p-icon-size);
+  flex-shrink: 0;
 }

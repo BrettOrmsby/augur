@@ -21,6 +21,7 @@
           </template>
         </Button>
       </InputGroup>
+      <DarkModeToggle class="mode-toggle" />
     </template>
   </Menubar>
 </template>
@@ -31,6 +32,7 @@ import Menubar from 'primevue/menubar'
 import InputGroup from 'primevue/inputgroup'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import EclipseIcon from '@/components/icons/EclipseIcon.vue'
 import SearchIcon from '@/components/icons/SearchIcon.vue'
 import { ref, watch } from 'vue'
@@ -98,5 +100,9 @@ svg {
 :deep(.p-menubar-start) {
   width: 100%;
   max-width: 600px;
+}
+.mode-toggle {
+  margin-left: var(--p-menubar-gap);
+  flex-shrink: 0;
 }
 </style>

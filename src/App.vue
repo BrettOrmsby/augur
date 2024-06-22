@@ -2,6 +2,13 @@
 import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { RouterView } from 'vue-router'
+import { useDark } from '@vueuse/core'
+
+useDark({
+  selector: ':root',
+  valueDark: 'app-dark',
+  valueLight: 'app-light'
+})
 // TODO: batch search pages by 60 or 75
 </script>
 
