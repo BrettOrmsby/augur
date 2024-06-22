@@ -26,6 +26,19 @@ const router = createRouter({
       meta: {
         title: 'Augur • Search'
       }
+    },
+    {
+      path: '/404',
+      component: import('../views/404View.vue'),
+      meta: {
+        title: 'Augur Not Found'
+      }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect(to) {
+        return { path: '/404' }
+      }
     }
   ]
 })
