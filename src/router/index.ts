@@ -25,6 +25,10 @@ const router = createRouter({
       component: () => import('../views/SearchView.vue'),
       meta: {
         title: 'Augur • Search'
+      },
+      beforeEnter(to, _, next) {
+        document.title = (to.query.q || 'Everything') + ' • Augur Search'
+        next()
       }
     },
     {

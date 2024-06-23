@@ -45,9 +45,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import scryfall from 'scryfall-client'
-import type List from 'scryfall-client/dist/models/list'
-import type Card from 'scryfall-client/dist/models/card'
 import Divider from 'primevue/divider'
 import Message from 'primevue/message'
 import Skeleton from 'primevue/skeleton'
@@ -83,9 +80,16 @@ const query = computed({
     router.replace({ query: value })
   }
 })
-watch(query, () => getScryfallData())
+
+watch(query, () => {
+  getScryfallData()
+  document.title = query.value.q + ' • Augur Search'
+})
 // If the search term does not change, it should be reloaded anyways
-watch(reloadSearch, () => getScryfallData())
+watch(reloadSearch, () => {
+  getScryfallData()
+  document.title = (query.value.q || 'Everything') + ' • Augur Search'
+})
 
 async function getScryfallData() {
   isLoading.value = true

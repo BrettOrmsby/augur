@@ -46,7 +46,7 @@ export default async function batchSearchScryfall(
   options?: SearchQueryOptions | undefined
 ): Promise<BatchScryfallResult> {
   let toSavePage = null
-  let numberCards = 60 * pageNumber
+  const numberCards = 60 * pageNumber
   const scryfallPage = Math.floor(numberCards / 175) + 1
 
   let cards: Card[]

@@ -9,7 +9,6 @@ useDark({
   valueDark: 'app-dark',
   valueLight: 'app-light'
 })
-// TODO: batch search pages by 60 or 75
 </script>
 
 <template>
