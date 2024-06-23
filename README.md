@@ -4,7 +4,7 @@
 
 https://augur-mtg.vercel.app/
 
-![Example Search](/public/example-page.png)
+<img alt="Example Search" src="/public/example-page.png" height="300"/>
 
 ## Features
 
