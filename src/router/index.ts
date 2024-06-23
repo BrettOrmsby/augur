@@ -29,7 +29,7 @@ const router = createRouter({
     },
     {
       path: '/404',
-      component: import('../views/404View.vue'),
+      component: () => import('../views/404View.vue'),
       meta: {
         title: 'Augur Not Found'
       }

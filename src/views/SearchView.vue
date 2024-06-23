@@ -5,7 +5,7 @@
     <NavBar />
   </header>
   <main>
-    <SearchToolBar :data="data" />
+    <SearchToolBar :isMore="!!data?.isMore" />
     <template v-if="isLoading">
       <Skeleton style="margin-top: 1rem; margin-bottom: 1rem" />
       <Divider />
@@ -23,20 +23,20 @@
       <p>
         Viewing
         <b
-          >{{ ((query.page - 1) * 175 + 1).toLocaleString() }}-{{
-            (data?.total_cards && query.page * 175 > data.total_cards
-              ? data.total_cards
-              : query.page * 175
+          >{{ ((query.page - 1) * 60 + 1).toLocaleString() }}-{{
+            (data.totalCards && query.page * 60 > data.totalCards
+              ? data.totalCards
+              : query.page * 60
             ).toLocaleString()
           }}</b
         >
-        of <b>{{ data?.total_cards?.toLocaleString() }}</b> cards
+        of <b>{{ data.totalCards.toLocaleString() }}</b> cards
       </p>
       <Divider />
       <div class="card-container">
-        <MTGCard v-for="(card, index) in data" :card="card" :key="index" />
+        <MTGCard v-for="(card, index) in data.cards" :card="card" :key="index" />
       </div>
-      <SearchToolBar :data="data" />
+      <SearchToolBar :isMore="data.isMore" />
     </template>
   </main>
   <TheFooter />
@@ -59,11 +59,15 @@ import NavBar from '@/components/NavBar.vue'
 import SkeletonCard from '@/components/SkeletonCard.vue'
 import { reloadSearch, settings } from '@/store/store'
 import TheFooter from '@/components/TheFooter.vue'
+import {
+  default as batchSearchScryfall,
+  type BatchScryfallResult
+} from '@/utils/batchScryfallSearch'
 
 const isLoading = ref(true)
 const isError = ref(false)
 const errorMessage = ref('')
-const data = ref<null | List<Card>>(null)
+const data = ref<null | BatchScryfallResult>(null)
 
 const route = useRoute()
 const router = useRouter()
@@ -87,11 +91,14 @@ async function getScryfallData() {
   isLoading.value = true
 
   try {
-    const scryfallData = await scryfall.search(query.value.q || 'id>=0', {
-      page: Number(query.value.page),
-      order: settings.value.order as any,
-      dir: settings.value.direction
-    })
+    const scryfallData = await batchSearchScryfall(
+      query.value.q || 'id>=0',
+      Number(query.value.page),
+      {
+        order: settings.value.order,
+        dir: settings.value.direction
+      }
+    )
     data.value = scryfallData
     isError.value = false
   } catch (e) {

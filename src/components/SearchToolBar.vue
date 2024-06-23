@@ -1,7 +1,12 @@
 <template>
   <Toolbar>
     <template #start>
-      <RouterLink :to="{ name: 'search', query: { page: Number(route.query.page || 1) - 1 } }">
+      <RouterLink
+        :to="{
+          name: 'search',
+          query: { page: Number(route.query.page || 1) - 1, q: route.query.q }
+        }"
+      >
         <Button
           label="Previous"
           iconPos="left"
@@ -34,14 +39,13 @@
       </Button>
     </template>
     <template #end>
-      <RouterLink :to="{ name: 'search', query: { page: Number(route.query.page || 1) + 1 } }">
-        <Button
-          label="Next"
-          iconPos="right"
-          size="small"
-          severity="secondary"
-          :disabled="!data?.has_more"
-        >
+      <RouterLink
+        :to="{
+          name: 'search',
+          query: { page: Number(route.query.page || 1) + 1, q: route.query.q }
+        }"
+      >
+        <Button label="Next" iconPos="right" size="small" severity="secondary" :disabled="!isMore">
           <template #icon="iconClass"><ChevronRightIcon :class="iconClass.class" /></template>
         </Button>
       </RouterLink>
@@ -52,8 +56,6 @@
 <script lang="ts" setup>
 import Button from 'primevue/button'
 import Toolbar from 'primevue/toolbar'
-import List from 'scryfall-client/dist/models/list'
-import Card from 'scryfall-client/dist/models/card'
 import ChevronLeftIcon from '@/components/icons/ChevronLeftIcon.vue'
 import SettingsIcon from '@/components/icons/SettingsIcon.vue'
 import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
@@ -62,7 +64,7 @@ import { useRoute } from 'vue-router'
 import { UIStates, clipboard } from '@/store/store'
 import { computed } from 'vue'
 
-defineProps<{ data: null | List<Card> }>()
+defineProps<{ isMore: boolean }>()
 
 const route = useRoute()
 const isPrevPage = computed(() => !isNaN(Number(route.query.page)) && Number(route.query.page) > 1)
