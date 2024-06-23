@@ -82,7 +82,7 @@ watch(selectedCard, (value) => value && loadCard(value))
 
 watch(
   () => UIStates.isClipBoardOpen,
-  () => (selectedCard.value = clipboard.value.cards[0] || '')
+  () => (selectedCard.value = sortedClipboard.value[0] || '')
 )
 
 const toast = useToast()
