@@ -136,6 +136,7 @@ main {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--block-space);
+  margin-top: var(--block-space);
 }
 
 @media (min-width: 370px) {

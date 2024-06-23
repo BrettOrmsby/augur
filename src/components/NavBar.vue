@@ -105,4 +105,9 @@ svg {
   margin-left: var(--p-menubar-gap);
   flex-shrink: 0;
 }
+
+:deep(a),
+a {
+  text-decoration: none;
+}
 </style>

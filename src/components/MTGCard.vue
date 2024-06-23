@@ -108,6 +108,7 @@ const toggleClipboard = () => {
   background-color: var(--p-content-background);
   color: var(--p-surface-400);
   text-align: center;
+  cursor: pointer;
 }
 .card::before {
   padding: var(--block-space);
