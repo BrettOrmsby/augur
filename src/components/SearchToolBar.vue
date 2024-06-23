@@ -6,6 +6,7 @@
           name: 'search',
           query: { page: Number(route.query.page || 1) - 1, q: route.query.q }
         }"
+        style="text-decoration: none"
       >
         <Button
           label="Previous"
@@ -44,6 +45,7 @@
           name: 'search',
           query: { page: Number(route.query.page || 1) + 1, q: route.query.q }
         }"
+        style="text-decoration: none"
       >
         <Button label="Next" iconPos="right" size="small" severity="secondary" :disabled="!isMore">
           <template #icon="iconClass"><ChevronRightIcon :class="iconClass.class" /></template>
