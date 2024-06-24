@@ -49,21 +49,7 @@ export default async function batchSearchScryfall(
   const numberCards = 60 * pageNumber
   const scryfallPage = Math.floor(numberCards / 175) + 1
 
-  let cards: Card[]
-
-  // Check to see if the scryfall page was loaded and saved and get that page
-  if (
-    prev &&
-    prev.pageNumber === scryfallPage &&
-    prev.searchString === searchString &&
-    prev.options?.toString() === options?.toString()
-  ) {
-    cards = prev.cards
-    toSavePage = prev.cards
-  } else {
-    toSavePage = await scryfall.search(searchString, { ...options, page: scryfallPage } as any)
-    cards = toSavePage
-  }
+  let cards: Card[] = []
 
   // See if the previous page is needed
   let slice = 60 * (pageNumber - 1) - (scryfallPage - 1) * 175
@@ -76,20 +62,44 @@ export default async function batchSearchScryfall(
       prev.searchString === searchString &&
       prev.options?.toString() === options?.toString()
     ) {
-      cards = [...prev.cards, ...cards]
+      cards = prev.cards
     } else {
       const prevPage = await scryfall.search(searchString, {
         ...options,
         page: scryfallPage - 1
       } as any)
-      cards = [...prevPage, ...cards]
+      cards = prevPage
     }
   }
 
-  const batch = cards.slice(slice, slice + 60)
+  // Check if the next page does not need to be fetched (and if it does not exist)
+  if (cards.length > 0 && (cards as List<Card>).total_cards! <= (scryfallPage - 1) * 175) {
+    const batch = cards.slice(slice, slice + 60)
+
+    return {
+      isMore: false,
+      totalCards: (cards as List<Card>).total_cards! || 0,
+      cards: batch
+    }
+  }
+
+  // Check to see if the scryfall page was loaded and saved and get that page
+  if (
+    prev &&
+    prev.pageNumber === scryfallPage &&
+    prev.searchString === searchString &&
+    prev.options?.toString() === options?.toString()
+  ) {
+    cards = [...cards, ...prev.cards]
+    toSavePage = prev.cards
+  } else {
+    toSavePage = await scryfall.search(searchString, { ...options, page: scryfallPage } as any)
+    cards = [...cards, ...toSavePage]
+  }
 
   // save this query for if it can be reused when the user goes to the previous or next page
   prev = { pageNumber: scryfallPage, cards: toSavePage, searchString, options }
+  const batch = cards.slice(slice, slice + 60)
 
   return {
     isMore: toSavePage.has_more || cards.length >= slice + 60,
