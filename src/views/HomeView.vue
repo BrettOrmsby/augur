@@ -16,6 +16,16 @@
         </template>
       </Button>
     </InputGroup>
+    <div class="button-container">
+      <a href="https://scryfall.com/docs/syntax" target="_blank" style="text-decoration: none">
+        <Button label="Scryfall Syntax" severity="secondary">
+          <template #icon="iconClass">
+            <OpenLinkIcon :class="iconClass.class" />
+          </template>
+        </Button>
+      </a>
+      <DarkModeToggle />
+    </div>
     <h2>Features</h2>
     <div class="feature-container">
       <Card>
@@ -102,7 +112,9 @@ import PhoneIcon from '@/components/icons/PhoneIcon.vue'
 import SettingsIcon from '@/components/icons/SettingsIcon.vue'
 import PiggyBankIcon from '@/components/icons/PiggyBankIcon.vue'
 import SunMoonIcon from '@/components/icons/SunMoonIcon.vue'
+import OpenLinkIcon from '@/components/icons/OpenLinkIcon.vue'
 import TheFooter from '@/components/TheFooter.vue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
 
 const router = useRouter()
 
@@ -136,6 +148,14 @@ strong {
 
 .p-inputgroup {
   max-width: 400px;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--inline-space);
+  margin-top: var(--inline-space);
 }
 
 .feature-container {
