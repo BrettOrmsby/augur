@@ -64,7 +64,7 @@ const isError = ref(false)
 const data = ref<Card>()
 const selectedCard = ref('')
 
-const sortedClipboard = computed(() => clipboard.value.cards.sort())
+const sortedClipboard = computed(() => [...clipboard.value.cards].sort())
 
 const loadCard = async (card: string) => {
   isLoading.value = true
