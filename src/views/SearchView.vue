@@ -37,6 +37,7 @@
         <MTGCard v-for="(card, index) in data.cards" :card="card" :key="index" />
       </div>
       <SearchToolBar :isMore="data.isMore" />
+      <ScrollTop />
     </template>
   </main>
   <TheFooter />
@@ -48,6 +49,7 @@ import { useRoute, useRouter } from 'vue-router'
 import Divider from 'primevue/divider'
 import Message from 'primevue/message'
 import Skeleton from 'primevue/skeleton'
+import ScrollTop from 'primevue/scrolltop'
 import MTGCard from '@/components/MTGCard.vue'
 import SearchToolBar from '@/components/SearchToolBar.vue'
 import SettingsModel from '@/components/SettingsModel.vue'
