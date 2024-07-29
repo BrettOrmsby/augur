@@ -14,6 +14,10 @@
           placeholder="Search"
           aria-label="Search"
           @keyup.enter="search"
+          autocapitalize="off"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
         />
         <Button aria-label="Search" @click="search">
           <template #icon="icon">
