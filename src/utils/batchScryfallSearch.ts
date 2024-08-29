@@ -60,7 +60,7 @@ export default async function batchSearchScryfall(
       prev &&
       prev.pageNumber === scryfallPage - 1 &&
       prev.searchString === searchString &&
-      prev.options?.toString() === options?.toString()
+      JSON.stringify(prev.options) === JSON.stringify(options)
     ) {
       cards = prev.cards
     } else {
@@ -88,7 +88,7 @@ export default async function batchSearchScryfall(
     prev &&
     prev.pageNumber === scryfallPage &&
     prev.searchString === searchString &&
-    prev.options?.toString() === options?.toString()
+    JSON.stringify(prev.options) === JSON.stringify(options)
   ) {
     cards = [...cards, ...prev.cards]
     toSavePage = prev.cards
