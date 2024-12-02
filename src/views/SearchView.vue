@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Divider from 'primevue/divider'
 import Message from 'primevue/message'
@@ -56,17 +56,11 @@ import SettingsModel from '@/components/SettingsModel.vue'
 import ClipboardModel from '@/components/ClipboardModel.vue'
 import NavBar from '@/components/NavBar.vue'
 import SkeletonCard from '@/components/SkeletonCard.vue'
-import { reloadSearch, settings } from '@/store/store'
+import { reloadSearch } from '@/store/store'
+import { useScryfallData } from '@/composables/useScryfallData'
 import TheFooter from '@/components/TheFooter.vue'
-import {
-  default as batchSearchScryfall,
-  type BatchScryfallResult
-} from '@/utils/batchScryfallSearch'
 
-const isLoading = ref(true)
-const isError = ref(false)
-const errorMessage = ref('')
-const data = ref<null | BatchScryfallResult>(null)
+const { isLoading, isError, data, errorMessage, fetchScryfallData } = useScryfallData()
 
 const route = useRoute()
 const router = useRouter()
@@ -84,45 +78,16 @@ const query = computed({
 })
 
 watch(query, () => {
-  getScryfallData()
+  fetchScryfallData(query)
   document.title = query.value.q + ' • Augur Search'
 })
 // If the search term does not change, it should be reloaded anyways
 watch(reloadSearch, () => {
-  getScryfallData()
+  fetchScryfallData(query)
   document.title = (query.value.q || 'Everything') + ' • Augur Search'
 })
 
-async function getScryfallData() {
-  isLoading.value = true
-
-  try {
-    const scryfallData = await batchSearchScryfall(
-      query.value.q || 'id>=0',
-      Number(query.value.page),
-      {
-        order: settings.value.order,
-        dir: settings.value.direction
-      }
-    )
-    data.value = scryfallData
-    isError.value = false
-  } catch (e) {
-    const details: string = (e as any).originalError.response.body.details
-    if (details.startsWith('Your query didn')) {
-      errorMessage.value = 'No cards match your query.'
-    } else if (details.startsWith('You have paginated beyond the end of these results')) {
-      errorMessage.value = 'This page does not exist for your query.'
-    } else if ((e as any).originalError.response.body.warnings?.length > 0) {
-      errorMessage.value = (e as any).originalError.response.body.warnings.join('\n')
-    }
-    isError.value = true
-  } finally {
-    isLoading.value = false
-  }
-}
-
-onMounted(getScryfallData)
+onMounted(() => fetchScryfallData(query))
 </script>
 
 <style scoped>

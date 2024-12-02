@@ -36,13 +36,6 @@
         aria-labelledby="price"
       />
     </div>
-    <Message
-      severity="warn"
-      v-if="!isMessageClosed"
-      @close="() => (messageClosed.isClosed = true)"
-      closable
-      >Changing settings will not reload the search.</Message
-    >
     <div class="footer">
       <Button
         type="button"
@@ -59,14 +52,13 @@ import { settings, UIStates } from '@/store/store'
 import Dialog from 'primevue/dialog'
 import Button from 'primevue/button'
 import Select from 'primevue/select'
-import Message from 'primevue/message'
 import SettingsIcon from '@/components/icons/SettingsIcon.vue'
-import { useLocalStorage } from '@vueuse/core'
 import { watch } from 'vue'
 import { ref } from 'vue'
-
-const isMessageClosed = ref(false)
-
+import { useRoute } from 'vue-router'
+import { useScryfallData } from '@/composables/useScryfallData'
+const { fetchScryfallData } = useScryfallData()
+const route = useRoute()
 const orders = [
   'name',
   'set',
@@ -88,13 +80,23 @@ const orders = [
 const directions = ['auto', 'asc', 'desc']
 const prices = ['usd', 'usd_foil', 'usd_etched', 'eur', 'eur_foil', 'tix']
 
-// Delay the hiding of the message to keep the close animation
-const messageClosed = useLocalStorage('messageClosed', { isClosed: false })
+const startingSettings = ref({ ...settings.value })
+
 watch(
   () => UIStates.isSettingsOpen,
-  () => {
-    if (messageClosed.value.isClosed) {
-      isMessageClosed.value = true
+  (value) => {
+    if (value) {
+      startingSettings.value = { ...settings.value }
+    } else if (
+      startingSettings.value.direction !== settings.value.direction ||
+      startingSettings.value.order !== settings.value.order
+    ) {
+      // reload the data with changed settings
+      const query = {
+        q: route.query.q?.toString() ?? '',
+        page: isNaN(Number(route.query.page)) ? 1 : Number(route.query.page)
+      }
+      fetchScryfallData(query)
     }
   }
 )
@@ -120,9 +122,6 @@ watch(
   grid-template-columns: 1fr 3fr;
   align-items: center;
   gap: var(--block-space) var(--inline-space);
-  margin-bottom: var(--block-space);
-}
-.p-message {
   margin-bottom: var(--block-space);
 }
 </style>
