@@ -102,7 +102,7 @@ export default async function batchSearchScryfall(
   const batch = cards.slice(slice, slice + 60)
 
   return {
-    isMore: toSavePage.has_more || cards.length >= slice + 60,
+    isMore: toSavePage.has_more || cards.length > slice + 60,
     totalCards: toSavePage.total_cards || 0,
     cards: batch
   }
