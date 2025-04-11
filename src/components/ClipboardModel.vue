@@ -36,7 +36,7 @@
         severity="danger"
         @click="clear"
         :aria-expanded="isConfirmVisible"
-        :aria-controls="isConfirmVisible ? 'confirm' : null"
+        :aria-controls="isConfirmVisible ? 'confirm' : undefined"
       ></Button>
       <Button label="Copy" @click="copy"></Button>
     </template>
