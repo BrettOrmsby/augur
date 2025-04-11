@@ -164,7 +164,7 @@ strong {
 
 .feature-container {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   flex-direction: row;
   flex-wrap: wrap;

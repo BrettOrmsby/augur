@@ -2,7 +2,7 @@
   font-family: system-ui, sans-serif;
   font-size: 14px;
   --block-space: 1.25rem;
-  --inline-space: 0.5rem
+  --inline-space: 0.5rem;
 }
 
 body,
@@ -19,7 +19,6 @@ main {
   padding: var(--block-space);
   margin: 0 auto;
   max-width: 900px;
-
 }
 
 .p-button svg {
