@@ -2,6 +2,8 @@ import type Card from 'scryfall-client/dist/models/card'
 import type List from 'scryfall-client/dist/models/list'
 import scryfall from 'scryfall-client'
 
+scryfall.setUserAgent('Auger/1.0.0')
+
 type SearchQueryOptions = {
   unique?: 'cards' | 'art' | 'prints'
   order?:
