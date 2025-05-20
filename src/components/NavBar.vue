@@ -1,7 +1,7 @@
 <template>
   <Menubar :model="[]">
     <template #start>
-      <div class="p-menubar-item logo-container">
+      <div class="p-menubar-item logo-container" v-tooltip.bottom="generateTooltip('Home')">
         <div class="p-menubar-item-content">
           <RouterLink to="/" class="p-menubar-item-link">
             <EclipseIcon class="logo" />
@@ -19,7 +19,7 @@
           autocorrect="off"
           spellcheck="false"
         />
-        <Button aria-label="Search" @click="search">
+        <Button aria-label="Search" @click="search" v-tooltip.bottom="generateTooltip('Search')">
           <template #icon="icon">
             <SearchIcon :class="icon.class" />
           </template>
@@ -42,6 +42,7 @@ import SearchIcon from '@/components/icons/SearchIcon.vue'
 import { ref, watch } from 'vue'
 import { reloadSearch } from '@/store/store'
 import { onMounted } from 'vue'
+import generateTooltip from '@/utils/generateTooltip'
 
 const router = useRouter()
 const route = useRoute()

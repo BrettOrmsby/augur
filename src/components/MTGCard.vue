@@ -15,7 +15,12 @@
     <Toolbar :class="{ vertical }">
       <template #start>
         <a :href="card.scryfall_uri" target="_blank">
-          <Button aria-label="Open In Scryfall" size="small" severity="secondary">
+          <Button
+            aria-label="Open In Scryfall"
+            v-tooltip.bottom="generateTooltip('Open In Scryfall')"
+            size="small"
+            severity="secondary"
+          >
             <template #icon="iconClass">
               <OpenLinkIcon :class="iconClass.class" />
             </template>
@@ -31,7 +36,19 @@
       </template>
       <template #end>
         <Button
+          aria-label="Copy Card Name"
+          v-tooltip.bottom="generateTooltip('Copy Card Name')"
+          size="small"
+          @click="copyCardName"
+          severity="secondary"
+        >
+          <template #icon="iconClass">
+            <CopyIcon :class="iconClass.class" />
+          </template>
+        </Button>
+        <Button
           aria-label="Flip Card"
+          v-tooltip.bottom="generateTooltip('Flip Card')"
           size="small"
           v-if="vertical || isFlipCard"
           @click="flipCard"
@@ -53,14 +70,22 @@ import Button from 'primevue/button'
 import Toolbar from 'primevue/toolbar'
 import Tag from 'primevue/tag'
 import OpenLinkIcon from '@/components/icons/OpenLinkIcon.vue'
+import CopyIcon from '@/components/icons/CopyIcon.vue'
 import RotateIcon from '@/components/icons/RotateIcon.vue'
 import { computed } from 'vue'
 import { ref } from 'vue'
 import { clipboard, settings } from '@/store/store'
+import { useClipboard } from '@/composables/useClipboard'
+import generateTooltip from '@/utils/generateTooltip'
 
 const props = defineProps<{ card: Card; vertical?: boolean }>()
 const isLoaded = ref(false)
 const cardImage = ref(props.card.getImage())
+
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD'
+})
 
 const isFlipCard = computed(
   () =>
@@ -76,17 +101,24 @@ const isFlipCard = computed(
       ].includes(props.card.layout))
 )
 
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD'
-})
-
 const flipCard = () => {
   isLoaded.value = false
   cardImage.value =
     cardImage.value === props.card.getImage()
       ? props.card.card_faces[1].image_uris?.png || props.card.getImage()
       : props.card.getImage()
+}
+
+const { copy } = useClipboard()
+const copyCardName = () => {
+  const messages = {
+    success: { summary: 'Card Copied', detail: `${props.card.name} was copied.` },
+    error: {
+      summary: 'Failed to Copy',
+      detail: `${props.card.name} was unable to be copied to the clipboard.`
+    }
+  }
+  copy(props.card.name, messages)
 }
 
 const toggleClipboard = () => {
@@ -133,6 +165,13 @@ const toggleClipboard = () => {
   animation:
     spinner-bulqg1 0.8s infinite linear alternate,
     spinner-oaa3wk 1.6s infinite linear;
+}
+
+:deep(.p-toolbar-end) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--inline-space);
 }
 
 .vertical {

@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './router'
 import ToastService from 'primevue/toastservice'
 import ConfirmationService from 'primevue/confirmationservice'
+import Tooltip from 'primevue/tooltip'
 import { definePreset } from '@primevue/themes'
 import Aura from '@primevue/themes/aura'
 
@@ -14,6 +15,7 @@ const app = createApp(App)
 app.use(router)
 app.use(ToastService)
 app.use(ConfirmationService)
+app.directive('tooltip', Tooltip)
 
 const preset = definePreset(Aura, {
   semantic: {

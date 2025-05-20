@@ -14,7 +14,7 @@
         autocorrect="off"
         spellcheck="false"
       />
-      <Button aria-label="Search" @click="search">
+      <Button aria-label="Search" @click="search" v-tooltip.bottom="generateTooltip('Search')">
         <template #icon="icon">
           <SearchIcon :class="icon.class" />
         </template>
@@ -119,6 +119,7 @@ import SunMoonIcon from '@/components/icons/SunMoonIcon.vue'
 import OpenLinkIcon from '@/components/icons/OpenLinkIcon.vue'
 import TheFooter from '@/components/TheFooter.vue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import generateTooltip from '@/utils/generateTooltip'
 
 const router = useRouter()
 

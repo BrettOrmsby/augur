@@ -38,7 +38,7 @@
         :aria-expanded="isConfirmVisible"
         :aria-controls="isConfirmVisible ? 'confirm' : undefined"
       ></Button>
-      <Button label="Copy" @click="copy"></Button>
+      <Button label="Copy" @click="copyClipboard"></Button>
     </template>
   </Dialog>
 </template>
@@ -56,8 +56,8 @@ import type Card from 'scryfall-client/dist/models/card'
 import MTGCard from './MTGCard.vue'
 import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
 import { computed } from 'vue'
-import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
+import { useClipboard } from '@/composables/useClipboard'
 
 const isLoading = ref(false)
 const isError = ref(false)
@@ -85,29 +85,24 @@ watch(
   () => (selectedCard.value = sortedClipboard.value[0] || '')
 )
 
-const toast = useToast()
-const copy = async () => {
-  try {
-    await navigator.clipboard.writeText(
-      clipboard.value.cards
-        .sort()
-        .map((card) => `1 ${card}`)
-        .join('\n')
-    )
-    toast.add({
-      severity: 'success',
+const { copy } = useClipboard()
+const copyClipboard = () => {
+  const cards = clipboard.value.cards
+    .sort()
+    .map((card) => `1 ${card}`)
+    .join('\n')
+
+  const messages = {
+    success: {
       summary: 'Clipboard Copied',
-      detail: 'Your cards have been copied to the clipboard.',
-      life: 3000
-    })
-  } catch (err) {
-    toast.add({
-      severity: 'error',
+      detail: 'Your cards have been copied to the clipboard.'
+    },
+    error: {
       summary: 'Failed to Copy',
-      detail: 'Your cards were unable to be copied to the clipboard.',
-      life: 3000
-    })
+      detail: 'Your cards were unable to be copied to the clipboard.'
+    }
   }
+  copy(cards, messages)
 }
 
 const confirm = useConfirm()

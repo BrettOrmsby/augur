@@ -22,6 +22,7 @@
     <template #center>
       <Button
         aria-label="Settings"
+        v-tooltip.bottom="generateTooltip('Settings')"
         size="small"
         class="settings"
         @click="() => (UIStates.isSettingsOpen = true)"
@@ -29,7 +30,8 @@
         <template #icon="iconClass"><SettingsIcon :class="iconClass.class" /></template>
       </Button>
       <Button
-        aria-label="Clipboard"
+        aria-label="Open Clipboard"
+        v-tooltip.bottom="generateTooltip('Open Clipboard')"
         size="small"
         :badge="clipboard.cards.length.toString()"
         @click="() => (UIStates.isClipBoardOpen = true)"
@@ -65,6 +67,7 @@ import ChevronRightIcon from '@/components/icons/ChevronRightIcon.vue'
 import { useRoute } from 'vue-router'
 import { UIStates, clipboard } from '@/store/store'
 import { computed } from 'vue'
+import generateTooltip from '@/utils/generateTooltip'
 
 defineProps<{ isMore: boolean }>()
 
