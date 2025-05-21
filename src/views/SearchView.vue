@@ -39,7 +39,7 @@
 
 <script lang="ts" setup>
 import { computed, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { Divider, Message, Skeleton } from 'primevue'
 import AddPageButton from '@/components/AddPageButton.vue'
 import ClipboardModel from '@/components/ClipboardModel.vue'
@@ -55,7 +55,6 @@ import { reloadSearch } from '@/store/store'
 const { isLoading, isError, data, errorMessage, fetchScryfallData } = useScryfallData()
 
 const route = useRoute()
-const router = useRouter()
 
 const query = computed(() => ({
   q: route.query.q?.toString() ?? '',

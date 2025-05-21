@@ -14,35 +14,37 @@
     <div class="form-container">
       <span id="order">Order</span>
       <Select
-        v-model="settings.order"
-        :options="orders"
+        v-model="updatedSettings.order"
+        :options="orderOptions"
+        optionLabel="label"
+        optionValue="value"
         placeholder="Order"
         aria-labelledby="order"
       />
 
       <span id="direction">Direction</span>
       <Select
-        v-model="settings.direction"
-        :options="directions"
+        v-model="updatedSettings.direction"
+        :options="directionOptions"
+        optionLabel="label"
+        optionValue="value"
         placeholder="Direction"
         aria-labelledby="direction"
       />
 
       <span id="price">Price</span>
       <Select
-        v-model="settings.price"
-        :options="prices"
+        v-model="updatedSettings.price"
+        :options="priceOptions"
+        optionLabel="label"
+        optionValue="value"
         placeholder="Price"
         aria-labelledby="price"
       />
     </div>
     <div class="footer">
-      <Button
-        type="button"
-        label="Close"
-        severity="secondary"
-        @click="() => (UIStates.isSettingsOpen = false)"
-      ></Button>
+      <Button label="Cancel" severity="secondary" @click="close"></Button>
+      <Button label="Apply Changes" @click="applyChanges"></Button>
     </div>
   </Dialog>
 </template>
@@ -58,44 +60,64 @@ import { settings, UIStates } from '@/store/store'
 const { fetchScryfallData } = useScryfallData()
 const route = useRoute()
 
-const orders = [
-  'name',
-  'set',
-  'released',
-  'rarity',
-  'color',
-  'usd',
-  'tix',
-  'eur',
-  'cmc',
-  'power',
-  'toughness',
-  'edhrec',
-  'penny',
-  'artist',
-  'review'
-].sort()
+const orderOptions = [
+  { value: 'name', label: 'Name' },
+  { value: 'released', label: 'Release Date' },
+  { value: 'set', label: 'Set/Number' },
+  { value: 'rarity', label: 'Rarity' },
+  { value: 'color', label: 'Color' },
+  { value: 'usd', label: 'Price: USD' },
+  { value: 'tix', label: 'Price: TIX' },
+  { value: 'eur', label: 'Price: EUR' },
+  { value: 'cmc', label: 'Mana Value' },
+  { value: 'power', label: 'Power' },
+  { value: 'toughness', label: 'Toughness' },
+  { value: 'artist', label: 'Artist' },
+  { value: 'edhrec', label: 'EDHREC Rank' },
+  { value: 'review', label: 'Set Review' },
+  { value: 'penny', label: 'Penny' }
+]
 
-const directions = ['auto', 'asc', 'desc']
-const prices = ['usd', 'usd_foil', 'usd_etched', 'eur', 'eur_foil', 'tix']
+const directionOptions = [
+  { value: 'auto', label: 'Auto' },
+  { value: 'asc', label: 'Asc' },
+  { value: 'desc', label: 'Desc' }
+]
+const priceOptions = [
+  { value: 'usd', label: 'USD' },
+  { value: 'usd_etched', label: 'USD Etched' },
+  { value: 'usd_foil', label: 'USD Foil' },
+  { value: 'eur', label: 'EUR' },
+  { value: 'eur_foil', label: 'EUR Foil' },
+  { value: 'tix', label: 'TIX' }
+]
 
-const startingSettings = ref({ ...settings.value })
+const close = () => (UIStates.isSettingsOpen = false)
 
+const startingSettings = ref<typeof settings.value>({ ...settings.value })
+const updatedSettings = ref<typeof settings.value>({ ...settings.value })
+
+const applyChanges = () => {
+  Object.assign(settings.value, updatedSettings.value)
+  close()
+  // data needs to be reloaded if order or direction are changed
+  if (
+    startingSettings.value.direction !== updatedSettings.value.direction ||
+    startingSettings.value.order !== updatedSettings.value.order
+  ) {
+    const query = {
+      q: route.query.q?.toString() ?? '',
+      page: isNaN(Number(route.query.page)) ? 1 : Number(route.query.page)
+    }
+    fetchScryfallData(query)
+  }
+}
 watch(
   () => UIStates.isSettingsOpen,
   (value) => {
     if (value) {
       startingSettings.value = { ...settings.value }
-    } else if (
-      startingSettings.value.direction !== settings.value.direction ||
-      startingSettings.value.order !== settings.value.order
-    ) {
-      // reload the data with changed settings
-      const query = {
-        q: route.query.q?.toString() ?? '',
-        page: isNaN(Number(route.query.page)) ? 1 : Number(route.query.page)
-      }
-      fetchScryfallData(query)
+      updatedSettings.value = { ...settings.value }
     }
   }
 )
@@ -115,6 +137,7 @@ watch(
 .footer {
   display: flex;
   justify-content: flex-end;
+  gap: var(--inline-space);
 }
 .form-container {
   display: grid;

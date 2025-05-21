@@ -31,13 +31,7 @@
           </template>
         </Button>
       </template>
-      <template #center
-        ><Tag
-          :value="formatter.format(Number(card.prices[settings.price]))"
-          v-if="card.prices[settings.price]"
-        />
-        <Tag value="..." v-else />
-      </template>
+      <template #center><Tag :value="price" /> </template>
       <template #end>
         <Button
           aria-label="Copy Card Name"
@@ -82,9 +76,25 @@ const props = defineProps<{ card: Card; vertical?: boolean }>()
 const isLoaded = ref(false)
 const cardImage = ref(props.card.getImage())
 
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD'
+const price = computed(() => {
+  if (!props.card.prices[settings.value.price]) {
+    return '...'
+  }
+
+  let currency = 'USD'
+  if (settings.value.price.startsWith('eur')) {
+    currency = 'EUR'
+  }
+
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency
+  })
+  const value = formatter.format(Number(props.card.prices[settings.value.price]))
+  if (settings.value.price.startsWith('tix')) {
+    return value.replace('$', '')
+  }
+  return value
 })
 
 const isFlipCard = computed(
