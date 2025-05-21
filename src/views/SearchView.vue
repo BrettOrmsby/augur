@@ -5,9 +5,8 @@
     <NavBar />
   </header>
   <main>
-    <SearchToolBar :isMore="!!data?.isMore" />
     <template v-if="isLoading">
-      <Skeleton style="margin-top: 1rem; margin-bottom: 1rem" />
+      <Skeleton style="margin-top: 1rem; margin-bottom: 1rem; height: 2rem" />
       <Divider />
       <div class="card-container">
         <SkeletonCard v-for="index in 12" :key="index" />
@@ -20,24 +19,26 @@
       {{ errorMessage }}
     </Message>
     <template v-else-if="data">
-      <p>
-        Viewing
-        <b
-          >{{ ((query.page - 1) * 60 + 1).toLocaleString() }}-{{
-            (data.totalCards && query.page * 60 > data.totalCards
-              ? data.totalCards
-              : query.page * 60
-            ).toLocaleString()
-          }}</b
+      <div class="viewing-bar">
+        <span>
+          Viewing
+          <b
+            >{{ ((query.page - 1) * 60 + 1).toLocaleString() }}-{{
+              (data.totalCards && query.page * 60 > data.totalCards
+                ? data.totalCards
+                : query.page * 60
+              ).toLocaleString()
+            }}</b
+          >
+          of <b>{{ data.totalCards.toLocaleString() }}</b> cards</span
         >
-        of <b>{{ data.totalCards.toLocaleString() }}</b> cards
-      </p>
+        <AddPageButton />
+      </div>
       <Divider />
       <div class="card-container">
         <MTGCard v-for="(card, index) in data.cards" :card="card" :key="index" />
       </div>
       <SearchToolBar :isMore="data.isMore" />
-      <ScrollTop />
     </template>
   </main>
   <TheFooter />
@@ -49,7 +50,6 @@ import { useRoute, useRouter } from 'vue-router'
 import Divider from 'primevue/divider'
 import Message from 'primevue/message'
 import Skeleton from 'primevue/skeleton'
-import ScrollTop from 'primevue/scrolltop'
 import MTGCard from '@/components/MTGCard.vue'
 import SearchToolBar from '@/components/SearchToolBar.vue'
 import SettingsModel from '@/components/SettingsModel.vue'
@@ -59,6 +59,7 @@ import SkeletonCard from '@/components/SkeletonCard.vue'
 import { reloadSearch } from '@/store/store'
 import { useScryfallData } from '@/composables/useScryfallData'
 import TheFooter from '@/components/TheFooter.vue'
+import AddPageButton from '@/components/AddPageButton.vue'
 
 const { isLoading, isError, data, errorMessage, fetchScryfallData } = useScryfallData()
 
@@ -97,6 +98,14 @@ main {
 .p-message {
   margin-top: var(--block-space);
   white-space: pre-wrap;
+}
+
+.viewing-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: var(--block-space) 0;
+  gap: var(--inline-space);
 }
 
 .card-container {

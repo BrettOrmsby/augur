@@ -10,6 +10,7 @@
       >
         <Button
           label="Previous"
+          v-tooltip.bottom="generateTooltip('Previous Page')"
           iconPos="left"
           size="small"
           severity="secondary"
@@ -24,7 +25,6 @@
         aria-label="Settings"
         v-tooltip.bottom="generateTooltip('Settings')"
         size="small"
-        class="settings"
         @click="() => (UIStates.isSettingsOpen = true)"
       >
         <template #icon="iconClass"><SettingsIcon :class="iconClass.class" /></template>
@@ -40,6 +40,8 @@
           <ClipboardIcon :class="iconClass.class" />
         </template>
       </Button>
+      <CopyClipboardButton :show-text="false" />
+      <ClearClipboardButton :show-text="false" />
     </template>
     <template #end>
       <RouterLink
@@ -49,7 +51,14 @@
         }"
         style="text-decoration: none"
       >
-        <Button label="Next" iconPos="right" size="small" severity="secondary" :disabled="!isMore">
+        <Button
+          label="Next"
+          v-tooltip.bottom="generateTooltip('Next Page')"
+          iconPos="right"
+          size="small"
+          severity="secondary"
+          :disabled="!isMore"
+        >
           <template #icon="iconClass"><ChevronRightIcon :class="iconClass.class" /></template>
         </Button>
       </RouterLink>
@@ -68,6 +77,8 @@ import { useRoute } from 'vue-router'
 import { UIStates, clipboard } from '@/store/store'
 import { computed } from 'vue'
 import generateTooltip from '@/utils/generateTooltip'
+import CopyClipboardButton from './CopyClipboardButton.vue'
+import ClearClipboardButton from './ClearClipboardButton.vue'
 
 defineProps<{ isMore: boolean }>()
 
@@ -78,13 +89,23 @@ const isPrevPage = computed(() => !isNaN(Number(route.query.page)) && Number(rou
 <style scoped>
 .p-toolbar {
   margin-top: 1em;
+  position: sticky;
+  bottom: var(--inline-space);
+  z-index: 10;
 }
 
-.settings {
-  margin-right: var(--inline-space);
+:deep(.p-toolbar-center) {
+  display: flex;
+  gap: var(--inline-space);
 }
 
 .p-button:has(.p-badge) :deep(.p-button-label) {
   display: none;
+}
+
+@media (max-width: 450px) {
+  :deep(.p-button-label) {
+    display: none;
+  }
 }
 </style>

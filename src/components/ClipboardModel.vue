@@ -31,14 +31,8 @@
         severity="secondary"
         @click="() => (UIStates.isClipBoardOpen = false)"
       ></Button>
-      <Button
-        label="Clear"
-        severity="danger"
-        @click="clear"
-        :aria-expanded="isConfirmVisible"
-        :aria-controls="isConfirmVisible ? 'confirm' : undefined"
-      ></Button>
-      <Button label="Copy" @click="copyClipboard"></Button>
+      <ClearClipboardButton />
+      <CopyClipboardButton />
     </template>
   </Dialog>
 </template>
@@ -56,8 +50,8 @@ import type Card from 'scryfall-client/dist/models/card'
 import MTGCard from './MTGCard.vue'
 import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
 import { computed } from 'vue'
-import { useConfirm } from 'primevue/useconfirm'
-import { useClipboard } from '@/composables/useClipboard'
+import CopyClipboardButton from './CopyClipboardButton.vue'
+import ClearClipboardButton from './ClearClipboardButton.vue'
 
 const isLoading = ref(false)
 const isError = ref(false)
@@ -84,54 +78,6 @@ watch(
   () => UIStates.isClipBoardOpen,
   () => (selectedCard.value = sortedClipboard.value[0] || '')
 )
-
-const { copy } = useClipboard()
-const copyClipboard = () => {
-  const cards = clipboard.value.cards
-    .sort()
-    .map((card) => `1 ${card}`)
-    .join('\n')
-
-  const messages = {
-    success: {
-      summary: 'Clipboard Copied',
-      detail: 'Your cards have been copied to the clipboard.'
-    },
-    error: {
-      summary: 'Failed to Copy',
-      detail: 'Your cards were unable to be copied to the clipboard.'
-    }
-  }
-  copy(cards, messages)
-}
-
-const confirm = useConfirm()
-const isConfirmVisible = ref(false)
-const clear = () => {
-  confirm.require({
-    message: 'Are you sure you want to clear your clipboard? This action cannot be undone.',
-    header: 'Confirm Clearing',
-    rejectProps: {
-      label: 'Cancel',
-      severity: 'secondary'
-    },
-    acceptProps: {
-      label: 'Delete',
-      severity: 'danger'
-    },
-    accept() {
-      clipboard.value.cards = []
-      UIStates.isClipBoardOpen = false
-      selectedCard.value = ''
-    },
-    onShow: () => {
-      isConfirmVisible.value = true
-    },
-    onHide: () => {
-      isConfirmVisible.value = false
-    }
-  })
-}
 </script>
 
 <style scoped>
