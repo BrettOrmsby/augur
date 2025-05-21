@@ -48,17 +48,16 @@
 </template>
 
 <script lang="ts" setup>
-import { settings, UIStates } from '@/store/store'
-import Dialog from 'primevue/dialog'
-import Button from 'primevue/button'
-import Select from 'primevue/select'
-import SettingsIcon from '@/components/icons/SettingsIcon.vue'
-import { watch } from 'vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { Button, Dialog, Select } from 'primevue'
+import SettingsIcon from '@/components/icons/SettingsIcon.vue'
 import { useScryfallData } from '@/composables/useScryfallData'
+import { settings, UIStates } from '@/store/store'
+
 const { fetchScryfallData } = useScryfallData()
 const route = useRoute()
+
 const orders = [
   'name',
   'set',

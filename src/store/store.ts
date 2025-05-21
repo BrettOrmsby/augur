@@ -1,5 +1,5 @@
-import { useLocalStorage } from '@vueuse/core'
 import { reactive, ref } from 'vue'
+import { useLocalStorage } from '@vueuse/core'
 
 export const UIStates = reactive({
   isSettingsOpen: false,

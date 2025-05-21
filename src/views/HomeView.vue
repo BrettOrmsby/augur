@@ -102,23 +102,20 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import InputGroup from 'primevue/inputgroup'
-import InputText from 'primevue/inputtext'
-import Card from 'primevue/card'
-import Button from 'primevue/button'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { Button, Card, InputGroup, InputText } from 'primevue'
+import DarkModeToggle from '@/components/DarkModeToggle.vue'
+import TheFooter from '@/components/TheFooter.vue'
+import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
 import EclipseIcon from '@/components/icons/EclipseIcon.vue'
+import OpenLinkIcon from '@/components/icons/OpenLinkIcon.vue'
+import PiggyBankIcon from '@/components/icons/PiggyBankIcon.vue'
+import PhoneIcon from '@/components/icons/PhoneIcon.vue'
 import SearchIcon from '@/components/icons/SearchIcon.vue'
 import SearchCheckIcon from '@/components/icons/SearchCheckIcon.vue'
-import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
-import PhoneIcon from '@/components/icons/PhoneIcon.vue'
 import SettingsIcon from '@/components/icons/SettingsIcon.vue'
-import PiggyBankIcon from '@/components/icons/PiggyBankIcon.vue'
 import SunMoonIcon from '@/components/icons/SunMoonIcon.vue'
-import OpenLinkIcon from '@/components/icons/OpenLinkIcon.vue'
-import TheFooter from '@/components/TheFooter.vue'
-import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import generateTooltip from '@/utils/generateTooltip'
 
 const router = useRouter()

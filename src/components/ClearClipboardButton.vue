@@ -23,11 +23,10 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import Button from 'primevue/button'
-import { useConfirm } from 'primevue'
+import { Button, useConfirm } from 'primevue'
+import TrashIcon from './icons/TrashIcon.vue'
 import { UIStates, clipboard } from '@/store/store'
 import generateTooltip from '@/utils/generateTooltip'
-import TrashIcon from './icons/TrashIcon.vue'
 
 const { showText = true } = defineProps<{ showText?: boolean }>()
 

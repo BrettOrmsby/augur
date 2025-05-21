@@ -13,10 +13,10 @@
 </template>
 
 <script lang="ts" setup>
-import Button from 'primevue/button'
+import { useDark, useToggle } from '@vueuse/core'
+import { Button } from 'primevue'
 import SunIcon from '@/components/icons/SunIcon.vue'
 import MoonIcon from '@/components/icons/MoonIcon.vue'
-import { useDark, useToggle } from '@vueuse/core'
 import generateTooltip from '@/utils/generateTooltip'
 
 const isDark = useDark({

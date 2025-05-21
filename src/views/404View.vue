@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import Button from 'primevue/button'
+import { Button } from 'primevue'
 </script>
 
 <style scoped>

@@ -31,17 +31,13 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
-import Menubar from 'primevue/menubar'
-import InputGroup from 'primevue/inputgroup'
-import InputText from 'primevue/inputtext'
-import Button from 'primevue/button'
+import { Button, InputGroup, InputText, Menubar } from 'primevue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
 import EclipseIcon from '@/components/icons/EclipseIcon.vue'
 import SearchIcon from '@/components/icons/SearchIcon.vue'
-import { ref, watch } from 'vue'
 import { reloadSearch } from '@/store/store'
-import { onMounted } from 'vue'
 import generateTooltip from '@/utils/generateTooltip'
 
 const router = useRouter()

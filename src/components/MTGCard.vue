@@ -64,18 +64,14 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, computed } from 'vue'
 import type Card from 'scryfall-client/dist/models/card'
-import DeferredContent from 'primevue/deferredcontent'
-import Button from 'primevue/button'
-import Toolbar from 'primevue/toolbar'
-import Tag from 'primevue/tag'
-import OpenLinkIcon from '@/components/icons/OpenLinkIcon.vue'
+import { Button, DeferredContent, Tag, Toolbar } from 'primevue'
 import CopyIcon from '@/components/icons/CopyIcon.vue'
+import OpenLinkIcon from '@/components/icons/OpenLinkIcon.vue'
 import RotateIcon from '@/components/icons/RotateIcon.vue'
-import { computed } from 'vue'
-import { ref } from 'vue'
-import { clipboard, settings } from '@/store/store'
 import { useClipboard } from '@/composables/useClipboard'
+import { clipboard, settings } from '@/store/store'
 import generateTooltip from '@/utils/generateTooltip'
 
 const props = defineProps<{ card: Card; vertical?: boolean }>()

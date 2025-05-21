@@ -2,13 +2,11 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config'
-import App from './App.vue'
-import router from './router'
-import ToastService from 'primevue/toastservice'
-import ConfirmationService from 'primevue/confirmationservice'
-import Tooltip from 'primevue/tooltip'
+import { ConfirmationService, ToastService, Tooltip } from 'primevue'
 import { definePreset } from '@primevue/themes'
 import Aura from '@primevue/themes/aura'
+import App from './App.vue'
+import router from './router'
 
 const app = createApp(App)
 

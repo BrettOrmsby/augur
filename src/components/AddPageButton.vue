@@ -5,10 +5,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useScryfallData } from '@/composables/useScryfallData'
 import { Button } from 'primevue'
+import SelectPage from '@/components/icons/SelectPage.vue'
+import { useScryfallData } from '@/composables/useScryfallData'
 import { clipboard } from '@/store/store'
-import SelectPage from './icons/SelectPage.vue'
 
 const { data } = useScryfallData()
 const addPage = () => {

@@ -67,18 +67,17 @@
 </template>
 
 <script lang="ts" setup>
-import Button from 'primevue/button'
-import Toolbar from 'primevue/toolbar'
-import ChevronLeftIcon from '@/components/icons/ChevronLeftIcon.vue'
-import SettingsIcon from '@/components/icons/SettingsIcon.vue'
-import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
-import ChevronRightIcon from '@/components/icons/ChevronRightIcon.vue'
-import { useRoute } from 'vue-router'
-import { UIStates, clipboard } from '@/store/store'
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { Button, Toolbar } from 'primevue'
+import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
+import ChevronLeftIcon from '@/components/icons/ChevronLeftIcon.vue'
+import ChevronRightIcon from '@/components/icons/ChevronRightIcon.vue'
+import SettingsIcon from '@/components/icons/SettingsIcon.vue'
+import CopyClipboardButton from '@/components/CopyClipboardButton.vue'
+import ClearClipboardButton from '@/components/ClearClipboardButton.vue'
+import { UIStates, clipboard } from '@/store/store'
 import generateTooltip from '@/utils/generateTooltip'
-import CopyClipboardButton from './CopyClipboardButton.vue'
-import ClearClipboardButton from './ClearClipboardButton.vue'
 
 defineProps<{ isMore: boolean }>()
 

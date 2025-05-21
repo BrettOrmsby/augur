@@ -47,19 +47,17 @@
 <script lang="ts" setup>
 import { computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Divider from 'primevue/divider'
-import Message from 'primevue/message'
-import Skeleton from 'primevue/skeleton'
+import { Divider, Message, Skeleton } from 'primevue'
+import AddPageButton from '@/components/AddPageButton.vue'
+import ClipboardModel from '@/components/ClipboardModel.vue'
 import MTGCard from '@/components/MTGCard.vue'
+import NavBar from '@/components/NavBar.vue'
 import SearchToolBar from '@/components/SearchToolBar.vue'
 import SettingsModel from '@/components/SettingsModel.vue'
-import ClipboardModel from '@/components/ClipboardModel.vue'
-import NavBar from '@/components/NavBar.vue'
 import SkeletonCard from '@/components/SkeletonCard.vue'
-import { reloadSearch } from '@/store/store'
-import { useScryfallData } from '@/composables/useScryfallData'
 import TheFooter from '@/components/TheFooter.vue'
-import AddPageButton from '@/components/AddPageButton.vue'
+import { useScryfallData } from '@/composables/useScryfallData'
+import { reloadSearch } from '@/store/store'
 
 const { isLoading, isError, data, errorMessage, fetchScryfallData } = useScryfallData()
 

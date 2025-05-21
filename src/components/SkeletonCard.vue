@@ -15,8 +15,9 @@
 </template>
 
 <script lang="ts" setup>
-import Skeleton from 'primevue/skeleton'
 import { computed } from 'vue'
+import Skeleton from 'primevue/skeleton'
+
 const props = defineProps<{ vertical?: boolean }>()
 
 const toolbarHeight = computed(() =>

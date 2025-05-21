@@ -38,20 +38,16 @@
 </template>
 
 <script lang="ts" setup>
-import { clipboard, UIStates } from '@/store/store'
-import Dialog from 'primevue/dialog'
-import Button from 'primevue/button'
-import Listbox from 'primevue/listbox'
-import { ref } from 'vue'
-import SkeletonCard from '@/components/SkeletonCard.vue'
-import { watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import scryfall from 'scryfall-client'
 import type Card from 'scryfall-client/dist/models/card'
-import MTGCard from './MTGCard.vue'
+import { Button, Dialog, Listbox } from 'primevue'
 import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
-import { computed } from 'vue'
-import CopyClipboardButton from './CopyClipboardButton.vue'
-import ClearClipboardButton from './ClearClipboardButton.vue'
+import ClearClipboardButton from '@/components/ClearClipboardButton.vue'
+import CopyClipboardButton from '@/components/CopyClipboardButton.vue'
+import MTGCard from '@/components//MTGCard.vue'
+import SkeletonCard from '@/components/SkeletonCard.vue'
+import { clipboard, UIStates } from '@/store/store'
 
 const isLoading = ref(false)
 const isError = ref(false)
