@@ -4,8 +4,7 @@
     label="Clear"
     severity="danger"
     @click="clear"
-    :aria-expanded="isConfirmVisible"
-    :aria-controls="isConfirmVisible ? 'confirm' : undefined"
+    :v-bind="ariaAttrs"
   ></Button>
   <Button
     v-else
@@ -14,15 +13,14 @@
     v-tooltip.bottom="generateTooltip('Clear Clipboard')"
     size="small"
     @click="clear"
-    :aria-expanded="isConfirmVisible"
-    :aria-controls="isConfirmVisible ? 'confirm' : undefined"
+    :v-bind="ariaAttrs"
   >
     <template #icon="iconClass"><TrashIcon :class="iconClass.class" /></template>
   </Button>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { Button, useConfirm } from 'primevue'
 import TrashIcon from './icons/TrashIcon.vue'
 import { UIStates, clipboard } from '@/store/store'
@@ -32,6 +30,12 @@ const { showText = true } = defineProps<{ showText?: boolean }>()
 
 const confirm = useConfirm()
 const isConfirmVisible = ref(false)
+
+const ariaAttrs = computed(() => ({
+  'aria-expanded': isConfirmVisible.value,
+  'aria-controls': isConfirmVisible.value ? 'confirm' : undefined
+}))
+
 const clear = () => {
   confirm.require({
     message: 'Are you sure you want to clear your clipboard? This action cannot be undone.',

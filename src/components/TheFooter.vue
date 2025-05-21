@@ -14,18 +14,22 @@
     </p>
     <p>
       Card prices and other card data are provided by
-      <a href="https://scryfall.com/Scryfall">Scryfall</a>. Scryfall makes no guarantee about its
-      price information and recommends you see stores for final prices and details.
+      <a href="https://scryfall.com/Scryfall" target="_blank" rel="noopener">Scryfall</a>. Scryfall
+      makes no guarantee about its price information and recommends you see stores for final prices
+      and details.
     </p>
     <p>
-      All other content © 2024 Brett Ormsby • View source on
-      <a href="https://github.com/BrettOrmsby/augur"><GithubIcon />Github</a>
+      All other content © {{ currentYear }} Brett Ormsby • View source on
+      <a href="https://github.com/BrettOrmsby/augur" target="_blank" rel="noopener"
+        ><GithubIcon />Github</a
+      >
     </p>
   </footer>
 </template>
 
 <script lang="ts" setup>
 import GithubIcon from '@/components/icons/GithubIcon.vue'
+const currentYear = new Date().getFullYear()
 </script>
 
 <style scoped>

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { Button, InputGroup, InputText, Menubar } from 'primevue'
 import DarkModeToggle from '@/components/DarkModeToggle.vue'
@@ -54,14 +54,14 @@ const search = () => {
   }
 }
 
-onMounted(() => (searchPrompt.value = route.query.q?.toString() || ''))
 watch(
   () => route.query.q,
   (val) => {
     if (val) {
       searchPrompt.value = val?.toString()
     }
-  }
+  },
+  { immediate: true }
 )
 </script>
 
@@ -69,7 +69,7 @@ watch(
 .p-menubar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -79,9 +79,6 @@ watch(
   border-right: none;
   border-top: none;
   z-index: 100;
-}
-.p-menubar {
-  justify-content: center;
 }
 :deep(.p-menubar-root-list) {
   flex-wrap: nowrap;

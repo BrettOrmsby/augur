@@ -21,7 +21,12 @@
       </Button>
     </InputGroup>
     <div class="button-container">
-      <a href="https://scryfall.com/docs/syntax" target="_blank" style="text-decoration: none">
+      <a
+        href="https://scryfall.com/docs/syntax"
+        target="_blank"
+        rel="noopener"
+        style="text-decoration: none"
+      >
         <Button label="Scryfall Syntax" severity="secondary">
           <template #icon="iconClass">
             <OpenLinkIcon :class="iconClass.class" />

@@ -45,7 +45,7 @@ import { Button, Dialog, Listbox } from 'primevue'
 import ClipboardIcon from '@/components/icons/ClipboardIcon.vue'
 import ClearClipboardButton from '@/components/ClearClipboardButton.vue'
 import CopyClipboardButton from '@/components/CopyClipboardButton.vue'
-import MTGCard from '@/components//MTGCard.vue'
+import MTGCard from '@/components/MTGCard.vue'
 import SkeletonCard from '@/components/SkeletonCard.vue'
 import { clipboard, UIStates } from '@/store/store'
 

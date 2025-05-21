@@ -8,24 +8,28 @@
       @load="() => (isLoaded = true)"
       class="card"
       :class="{ isInClipboard: clipboard.cards.includes(card.name) }"
+      tabindex="0"
+      @keyup.enter="toggleClipboard"
     />
     <div v-show="!isLoaded" class="card">
       <div class="spinner"></div>
     </div>
     <Toolbar :class="{ vertical }">
       <template #start>
-        <a :href="card.scryfall_uri" target="_blank">
-          <Button
-            aria-label="Open In Scryfall"
-            v-tooltip.bottom="generateTooltip('Open In Scryfall')"
-            size="small"
-            severity="secondary"
-          >
-            <template #icon="iconClass">
-              <OpenLinkIcon :class="iconClass.class" />
-            </template>
-          </Button>
-        </a>
+        <Button
+          aria-label="Open In Scryfall"
+          v-tooltip.bottom="generateTooltip('Open In Scryfall')"
+          size="small"
+          severity="secondary"
+          as="a"
+          :href="card.scryfall_uri"
+          target="_blank"
+          rel="noopener"
+        >
+          <template #icon="iconClass">
+            <OpenLinkIcon :class="iconClass.class" />
+          </template>
+        </Button>
       </template>
       <template #center
         ><Tag
@@ -145,6 +149,9 @@ const toggleClipboard = () => {
 .card.isInClipboard {
   outline: solid 2px var(--p-button-primary-background);
   outline-offset: 2px;
+}
+.card.isInClipboard:focus-visible {
+  outline-color: blue;
 }
 
 .card:has(.spinner) {

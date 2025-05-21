@@ -4,7 +4,7 @@
       <RouterLink
         :to="{
           name: 'search',
-          query: { page: Number(route.query.page || 1) - 1, q: route.query.q }
+          query: { page: currentPage - 1, q: route.query.q }
         }"
         style="text-decoration: none"
       >
@@ -14,7 +14,7 @@
           iconPos="left"
           size="small"
           severity="secondary"
-          :disabled="!isPrevPage"
+          :disabled="!hasPrevPage"
         >
           <template #icon="iconClass"><ChevronLeftIcon :class="iconClass.class" /></template>
         </Button>
@@ -47,7 +47,7 @@
       <RouterLink
         :to="{
           name: 'search',
-          query: { page: Number(route.query.page || 1) + 1, q: route.query.q }
+          query: { page: currentPage + 1, q: route.query.q }
         }"
         style="text-decoration: none"
       >
@@ -82,7 +82,8 @@ import generateTooltip from '@/utils/generateTooltip'
 defineProps<{ isMore: boolean }>()
 
 const route = useRoute()
-const isPrevPage = computed(() => !isNaN(Number(route.query.page)) && Number(route.query.page) > 1)
+const currentPage = computed(() => Number(route.query.page || 1))
+const hasPrevPage = computed(() => currentPage.value > 1)
 </script>
 
 <style scoped>

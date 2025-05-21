@@ -22,15 +22,8 @@
       <div class="viewing-bar">
         <span>
           Viewing
-          <b
-            >{{ ((query.page - 1) * 60 + 1).toLocaleString() }}-{{
-              (data.totalCards && query.page * 60 > data.totalCards
-                ? data.totalCards
-                : query.page * 60
-              ).toLocaleString()
-            }}</b
-          >
-          of <b>{{ data.totalCards.toLocaleString() }}</b> cards</span
+          <b>{{ viewingText.start }}-{{ viewingText.end }}</b>
+          of <b>{{ viewingText.total }}</b> cards</span
         >
         <AddPageButton />
       </div>
@@ -45,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Divider, Message, Skeleton } from 'primevue'
 import AddPageButton from '@/components/AddPageButton.vue'
@@ -64,29 +57,27 @@ const { isLoading, isError, data, errorMessage, fetchScryfallData } = useScryfal
 const route = useRoute()
 const router = useRouter()
 
-const query = computed({
-  get() {
-    return {
-      q: route.query.q?.toString() ?? '',
-      page: isNaN(Number(route.query.page)) ? 1 : Number(route.query.page)
-    }
+const query = computed(() => ({
+  q: route.query.q?.toString() ?? '',
+  page: isNaN(Number(route.query.page)) ? 1 : Number(route.query.page)
+}))
+
+const viewingText = computed(() => {
+  if (!data.value) return { start: 0, end: 0, total: 0 }
+  const start = ((query.value.page - 1) * 60 + 1).toLocaleString()
+  const end = Math.min(data.value.totalCards, query.value.page * 60).toLocaleString()
+  const total = data.value.totalCards.toLocaleString()
+  return { start, end, total }
+})
+
+watch(
+  [query, reloadSearch],
+  () => {
+    fetchScryfallData(query)
+    document.title = query.value.q + ' • Augur Search'
   },
-  set(value) {
-    router.replace({ query: value })
-  }
-})
-
-watch(query, () => {
-  fetchScryfallData(query)
-  document.title = query.value.q + ' • Augur Search'
-})
-// If the search term does not change, it should be reloaded anyways
-watch(reloadSearch, () => {
-  fetchScryfallData(query)
-  document.title = (query.value.q || 'Everything') + ' • Augur Search'
-})
-
-onMounted(() => fetchScryfallData(query))
+  { immediate: true }
+)
 </script>
 
 <style scoped>
