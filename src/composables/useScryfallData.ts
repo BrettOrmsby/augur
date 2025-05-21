@@ -23,16 +23,23 @@ export function useScryfallData() {
         order: settings.value.order,
         dir: settings.value.direction
       })
+      if (!scryfallData.cards.length) {
+        throw new Error('Pagination')
+      }
       data.value = scryfallData
       isError.value = false
-    } catch (e) {
-      const details: string = (e as any).originalError.response.body.details
+    } catch (e: any) {
+      const details: string = e.details ?? ''
+
       if (details.startsWith('Your query didn')) {
         errorMessage.value = 'No cards match your query.'
-      } else if (details.startsWith('You have paginated beyond the end of these results')) {
+      } else if (
+        details.startsWith('You have paginated beyond the end of these results') ||
+        e.message === 'Pagination'
+      ) {
         errorMessage.value = 'This page does not exist for your query.'
-      } else if ((e as any).originalError.response.body.warnings?.length > 0) {
-        errorMessage.value = (e as any).originalError.response.body.warnings.join('\n')
+      } else if (e.warnings?.length) {
+        errorMessage.value = e.warnings.join('\n')
       }
       isError.value = true
     } finally {
