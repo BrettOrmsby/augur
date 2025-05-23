@@ -2,10 +2,10 @@ import scryfall from 'scryfall-client'
 import type Card from 'scryfall-client/dist/models/card'
 import type List from 'scryfall-client/dist/models/list'
 
+const MAX_CACHE_ENTRIES = 3
 scryfall.setUserAgent('Auger/1.0.0')
 
 type SearchQueryOptions = {
-  unique?: 'cards' | 'art' | 'prints'
   order?:
     | 'name'
     | 'set'
@@ -23,89 +23,88 @@ type SearchQueryOptions = {
     | 'penny'
     | 'review'
   dir?: 'auto' | 'asc' | 'desc'
-  include_extras?: boolean
-  include_multilingual?: boolean
-  include_variations?: boolean
+  // unique?: 'cards' | 'art' | 'prints'
+  // include_extras?: boolean
+  // include_multilingual?: boolean
+  // include_variations?: boolean
 }
 
 export type BatchScryfallResult = { isMore: boolean; cards: Card[]; totalCards: number }
 
-let prev: {
-  pageNumber: number
-  cards: List<Card>
-  searchString: string
-  options: SearchQueryOptions | undefined
-} | null = null
+const apiCache = new Map<string, List<Card>>()
 
-/*
- * The scryfall api returns 175 cards
- * The scryfall website only shows 60 cards per page, so this website does too.
- * This function batches the api results into 60 cards so that the URL parameters match scryfall.
- */
+const generateCacheKey = (search: string, apiPage: number, options?: SearchQueryOptions) =>
+  `${search}|${apiPage}|${options?.order}|${options?.dir}`
+
+function getCached(key: string): List<Card> | undefined {
+  const entry = apiCache.get(key)
+  if (!entry) return undefined
+  // Refresh order
+  apiCache.delete(key)
+  apiCache.set(key, entry)
+  return entry
+}
+
+function setCached(key: string, result: List<Card>): void {
+  apiCache.set(key, result)
+  if (apiCache.size > MAX_CACHE_ENTRIES) {
+    // Remove the oldest entry
+    const firstKey = apiCache.keys().next().value!
+    apiCache.delete(firstKey)
+  }
+}
+
+async function loadAPIPage(
+  searchString: string,
+  apiPage: number,
+  options?: SearchQueryOptions
+): Promise<List<Card>> {
+  const cacheKey = generateCacheKey(searchString, apiPage, options)
+  if (apiCache.has(cacheKey)) return getCached(cacheKey)!
+  const apiResult = await scryfall.search(searchString, { ...options, page: apiPage } as any)
+  setCached(cacheKey, apiResult)
+  return apiResult
+}
+
 export default async function batchSearchScryfall(
   searchString: string,
   pageNumber: number,
-  options?: SearchQueryOptions | undefined
+  options?: SearchQueryOptions
 ): Promise<BatchScryfallResult> {
-  let toSavePage = null
-  const numberCards = 60 * pageNumber
-  const scryfallPage = Math.floor(numberCards / 175) + 1
+  const API_CARD_SIZE = 175
+  const PAGE_CARD_SIZE = 60
+  const startCardNumber = (pageNumber - 1) * PAGE_CARD_SIZE // Zero-index start
+  const endPageNumber = pageNumber * PAGE_CARD_SIZE - 1 // Zero-index start
+  const apiPage = Math.floor(startCardNumber / API_CARD_SIZE) + 1
 
-  let cards: Card[] = []
+  const isNextAPIPageRequired = apiPage * API_CARD_SIZE <= endPageNumber
 
-  // See if the previous page is needed
-  let slice = 60 * (pageNumber - 1) - (scryfallPage - 1) * 175
-  if (slice < 0) {
-    slice = 175 + slice
-
-    if (
-      prev &&
-      prev.pageNumber === scryfallPage - 1 &&
-      prev.searchString === searchString &&
-      JSON.stringify(prev.options) === JSON.stringify(options)
-    ) {
-      cards = prev.cards
-    } else {
-      const prevPage = await scryfall.search(searchString, {
-        ...options,
-        page: scryfallPage - 1
-      } as any)
-      cards = prevPage
-    }
+  const startPage = await loadAPIPage(searchString, apiPage, options)
+  let nextPage
+  if (isNextAPIPageRequired && startPage.has_more) {
+    nextPage = await loadAPIPage(searchString, apiPage + 1, options)
+    // Start loading next page to make it quicker
+    if (nextPage.has_more) loadAPIPage(searchString, apiPage + 2, options)
   }
 
-  // Check if the next page does not need to be fetched (and if it does not exist)
-  if (cards.length > 0 && (cards as List<Card>).total_cards! <= (scryfallPage - 1) * 175) {
-    const batch = cards.slice(slice, slice + 60)
+  // Start loading next page to make it quicker
+  if (!nextPage && apiPage === 1 && startPage.has_more)
+    loadAPIPage(searchString, apiPage + 1, options)
 
-    return {
-      isMore: false,
-      totalCards: (cards as List<Card>).total_cards! || 0,
-      cards: batch
-    }
+  const startIndex = startCardNumber - (apiPage - 1) * API_CARD_SIZE
+  const batch: Card[] = startPage.slice(startIndex, startIndex + PAGE_CARD_SIZE)
+
+  const endIndex = PAGE_CARD_SIZE - batch.length
+  if (batch.length < PAGE_CARD_SIZE && nextPage) {
+    batch.push(...nextPage.slice(0, endIndex))
   }
 
-  // Check to see if the scryfall page was loaded and saved and get that page
-  if (
-    prev &&
-    prev.pageNumber === scryfallPage &&
-    prev.searchString === searchString &&
-    JSON.stringify(prev.options) === JSON.stringify(options)
-  ) {
-    cards = [...cards, ...prev.cards]
-    toSavePage = prev.cards
-  } else {
-    toSavePage = await scryfall.search(searchString, { ...options, page: scryfallPage } as any)
-    cards = [...cards, ...toSavePage]
-  }
-
-  // save this query for if it can be reused when the user goes to the previous or next page
-  prev = { pageNumber: scryfallPage, cards: toSavePage, searchString, options }
-  const batch = cards.slice(slice, slice + 60)
-
+  const isNoNextAndMore =
+    !nextPage && (startPage.has_more || startPage.length > startIndex + PAGE_CARD_SIZE)
+  const isNextAndMore = !!nextPage && (nextPage.has_more || nextPage.length >= endIndex)
   return {
-    isMore: toSavePage.has_more || cards.length > slice + 60,
-    totalCards: toSavePage.total_cards || 0,
+    isMore: isNoNextAndMore || isNextAndMore,
+    totalCards: startPage.total_cards || 0,
     cards: batch
   }
 }
